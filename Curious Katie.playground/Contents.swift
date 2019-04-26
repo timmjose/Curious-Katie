@@ -1,167 +1,242 @@
 import UIKit
 import Foundation
 
-class Participant : Hashable {
+
+class Participant {
+    let name: String
+    let age: Int
+    var interests: Set<Interest>
     
-    static func == (lhs: Participant, rhs: Participant) -> Bool {
-        return lhs.uid == rhs.uid
-    }
-    
-    var uid: Int
-    var name: String
-    var age: Int
-    var interest: Set<Interest>
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(uid)
-    }
-    
-    init(uid: Int, name: String, age: Int, interest: Set<Interest>) {
-        self.uid = uid
+    init (name: String, age: Int) {
         self.name = name
         self.age = age
-        self.interest = interest
+        self.interests = Set<Interest>()
     }
 }
 
-class Interest : Hashable {
+class Interest {
+    let uid: String
+    let name: InterestName
+    let description: String
     
+    init (uid: String, name: InterestName, description: String? = nil) {
+        self.uid = uid
+        self.name = name
+        self.description = description ?? name.rawValue
+    }
+}
+
+extension Interest: Hashable {
     static func == (lhs: Interest, rhs: Interest) -> Bool {
         return lhs.uid == rhs.uid
     }
     
-    var uid: Int
-    var name: String
-    var description: String
     func hash(into hasher: inout Hasher) {
         hasher.combine(uid)
-    }
-    init(uid: Int, name: String, description: String) {
-        self.uid = uid
-        self.name = name
-        self.description = description
     }
 }
 
 enum InterestName: String {
-    case acting = "Acting"
-    case eatingPizza = "Eating Pizza"
-    case shopping = "Shopping"
-    case dancing = "Dancing"
-    case singing = "Singing"
+    case acting         = "Acting"
+    case eatingPizza    = "Eating Pizza"
+    case shopping       = "Shopping"
+    case dancing        = "Dancing"
+    case singing        = "Singing"
     case drinkingCoffee = "Drinking Coffee"
-    case jokingAround = "Joking Around"
-    case cooking = "Cooking"
-    case sports = "Sports"
-    case playingGames = "Games"
+    case comedy         = "Comedy"
+    case cooking        = "Cooking"
+    case football       = "Football"
+    case playingGames   = "Games"
 }
 
-var participant1 = Participant(uid: 1, name: "Joey", age: 26, interest:
-    [Interest(uid: 1, name: InterestName .acting.rawValue, description: "I love acting, I'm good looking and I'm a natural!"),
-     Interest(uid: 2, name: InterestName .eatingPizza.rawValue, description: "I can eat a 3 whole pizzas in one sitting!"),
-     Interest(uid: 9, name: InterestName .sports.rawValue, description: "I'm a natural athelete!"),
-     Interest(uid: 10, name: InterestName .playingGames.rawValue, description: "I can beat anyone in any game!")])
 
-var participant2 = Participant(uid: 2, name: "Chandler", age: 27, interest:
-    [Interest(uid: 4, name: InterestName .dancing.rawValue, description: "When I feel it, I get movin'!"),
-     Interest(uid: 2, name: InterestName .eatingPizza.rawValue, description: "I can eat a 3 whole pizzas in one sitting!"),
-     Interest(uid: 7, name: InterestName .jokingAround.rawValue, description: "Could I be more specific!?"),
-     Interest(uid: 10, name: InterestName .playingGames.rawValue, description: "I bet I can beat that Joey!")])
+// 10 Interests xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-var participant3 = Participant(uid: 3, name: "Monica", age: 26, interest:
-    [Interest(uid: 5, name: InterestName .singing.rawValue, description: "Shine the spotlight!"),
-     Interest(uid: 8, name: InterestName .cooking.rawValue, description: "I'm a professional chef! I cook for a living"),
-     Interest(uid: 3, name: InterestName .shopping.rawValue, description: ""),
-     Interest(uid: 9, name: InterestName .sports.rawValue, description: "I'm competitive so I love winning! Sports is definitely my thing!")])
+var acting = Interest(uid: NSUUID().uuidString, name: InterestName .acting)
 
-var participant4 = Participant(uid: 4, name: "Rachel", age: 25, interest:
-    [Interest(uid: 6, name: InterestName .drinkingCoffee.rawValue, description: "Coffee gets me up and running!"),
-     Interest(uid: 4, name: InterestName .dancing.rawValue, description: ""),
-     Interest(uid: 3, name: InterestName .shopping.rawValue, description: "I LOVE LOVE LOVE SHOPPING!")])
+var shopping = Interest(uid: NSUUID().uuidString, name: InterestName .shopping)
 
-var participant5 = Participant(uid: 5, name: "Phoebe", age: 27, interest:
-    [Interest(uid: 6, name: InterestName .drinkingCoffee.rawValue, description: "Soy latte a day keeps me going!"),
-     Interest(uid: 5, name: InterestName .singing.rawValue, description: "At one point in my life I used to play guitar and sing at a coffee shop"),
-     Interest(uid: 7, name: InterestName .jokingAround.rawValue, description: "")])
+var cooking = Interest(uid: NSUUID().uuidString, name: InterestName .cooking)
 
-var participant6 = Participant(uid: 6, name: "Ross", age: 28, interest:
-    [Interest(uid: 6, name: InterestName .dancing.rawValue, description: ""),
-     Interest(uid: 5, name: InterestName .eatingPizza.rawValue, description: ""),
-     Interest(uid: 7, name: InterestName .jokingAround.rawValue, description: "I like to think that I'm pretty funny"),
-     Interest (uid: 9, name: InterestName .sports.rawValue, description: "I always like to win, and sports shows that")])
+var eatingPizza = Interest(uid: NSUUID().uuidString, name: InterestName .eatingPizza)
 
-var participant7 = Participant(uid: 7, name: "Mike", age: 27, interest:
-    [Interest(uid: 4, name: InterestName .dancing.rawValue, description: "Bring me to the disco and I'll show you what I mean"),
-     Interest(uid: 10, name: InterestName .playingGames.rawValue, description: ""),
-     Interest(uid: 1, name: InterestName .acting.rawValue, description: "I've played Ant-man in the Marvel movies"),
-     Interest (uid: 2, name: InterestName .eatingPizza.rawValue, description: "")])
+var dancing = Interest(uid: NSUUID().uuidString, name: InterestName .dancing)
 
-var participant8 = Participant(uid: 8, name: "Ted", age: 26, interest:
-    [Interest(uid: 8, name: InterestName .cooking.rawValue, description: "I like to impress the ladies with my cooking skills"),
-     Interest(uid: 7, name: InterestName .jokingAround.rawValue, description: "I'm actually the funniest here, or am I..?"),
-     Interest(uid: 10, name: InterestName .playingGames.rawValue, description: "I'm a natural!")])
+var singing = Interest(uid: NSUUID().uuidString, name: InterestName .singing)
 
-var participant9 = Participant(uid: 9, name: "Barney", age: 27, interest:
-    [Interest(uid: 5, name: InterestName .singing.rawValue, description: "The mic and spotlight are my best friends"),
-     Interest(uid: 1, name: InterestName .acting.rawValue, description: "I'm in quite a couple of shows you may know of"),
-     Interest(uid: 10, name: InterestName .playingGames.rawValue, description: "I'm a natural! I'm better than Ted!")])
+var drinkingCoffee = Interest(uid: NSUUID().uuidString, name: InterestName .drinkingCoffee)
 
-var participant10 = Participant(uid: 10, name: "Robin", age: 27, interest:
-    [Interest(uid: 8, name: InterestName .cooking.rawValue, description: ""),
-     Interest(uid: 1, name: InterestName .acting.rawValue, description: "I am an agent of Shield in the Marvel movies"),
-     Interest(uid: 9, name: InterestName .sports.rawValue, description: "I'm physically fit and I love sports")])
+var football = Interest(uid: NSUUID().uuidString, name: InterestName .football)
 
-var participant11 = Participant(uid: 11, name: "Lily", age: 25, interest:
-    [Interest(uid: 8, name: InterestName .cooking.rawValue, description: "I'm quite the wizard in the kitchen"),
-     Interest(uid: 7, name: InterestName .jokingAround.rawValue, description: "I like making fun of my friends"),
-     Interest(uid: 6, name: InterestName .drinkingCoffee.rawValue, description: "")])
+var comedy = Interest(uid: NSUUID().uuidString, name: InterestName .comedy)
 
-var participant12 = Participant(uid: 12, name: "Marshall", age: 26, interest:
-    [Interest(uid: 9, name: InterestName .sports.rawValue, description: "I've always been the tallest dude and it's been such an advantage"),
-     Interest(uid: 10, name: InterestName .playingGames.rawValue, description: "I've created my own boardgames"),
-     Interest(uid: 5, name: InterestName .singing.rawValue, description: "")])
+var playingGames = Interest(uid: NSUUID().uuidString, name: InterestName .playingGames)
+
+// 10 Participants xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+var participant1 = Participant(name: "Joey", age: 26)
+
+participant1.interests.insert(acting)
+participant1.interests.insert(eatingPizza)
+participant1.interests.insert(dancing)
+participant1.interests.insert(football)
+participant1.interests.insert(comedy)
+
+var participant2 = Participant(name: "Chandler", age: 27)
+
+participant2.interests.insert(dancing)
+participant2.interests.insert(eatingPizza)
+participant2.interests.insert(comedy)
+participant2.interests.insert(football)
+participant2.interests.insert(playingGames)
+
+var participant3 = Participant(name: "Monica", age: 26)
+
+participant3.interests.insert(cooking)
+participant3.interests.insert(drinkingCoffee)
+participant3.interests.insert(dancing)
+participant3.interests.insert(shopping)
+participant3.interests.insert(acting)
+
+var participant4 = Participant(name: "Rachel", age: 25)
+
+participant4.interests.insert(cooking)
+participant4.interests.insert(drinkingCoffee)
+participant4.interests.insert(singing)
+participant4.interests.insert(playingGames)
+participant4.interests.insert(shopping)
+
+var participant5 = Participant(name: "Phoebe", age: 27)
+
+participant5.interests.insert(cooking)
+participant5.interests.insert(drinkingCoffee)
+participant5.interests.insert(singing)
+participant5.interests.insert(comedy)
+participant5.interests.insert(shopping)
+
+var participant6 = Participant(name: "Mike", age: 27)
+
+participant6.interests.insert(football)
+participant6.interests.insert(eatingPizza)
+participant6.interests.insert(dancing)
+participant6.interests.insert(playingGames)
+participant6.interests.insert(acting)
+
+var participant7 = Participant(name: "Ted", age: 27)
+
+participant7.interests.insert(comedy)
+participant7.interests.insert(drinkingCoffee)
+participant7.interests.insert(cooking)
+participant7.interests.insert(playingGames)
 
 
-var participantsAvailable: [Participant] = []
+var participant8 = Participant(name: "Barney", age: 26)
 
-participantsAvailable.append(participant1)
-participantsAvailable.append(participant2)
-participantsAvailable.append(participant3)
-participantsAvailable.append(participant4)
-participantsAvailable.append(participant5)
-participantsAvailable.append(participant6)
-participantsAvailable.append(participant7)
-participantsAvailable.append(participant8)
-participantsAvailable.append(participant9)
-participantsAvailable.append(participant10)
-participantsAvailable.append(participant11)
-participantsAvailable.append(participant12)
+participant8.interests.insert(acting)
+participant8.interests.insert(singing)
+participant8.interests.insert(dancing)
+participant8.interests.insert(playingGames)
+participant8.interests.insert(acting)
 
-var participantsSelected = [Participant]()
 
-participantsAvailable.shuffle()
+var participant9 = Participant(name: "Robin", age: 26)
 
-var numberOfParticipantsSelected = Int.random(in: 2...participantsAvailable.count)
+participant9.interests.insert(shopping)
+participant9.interests.insert(drinkingCoffee)
+participant9.interests.insert(football)
+participant9.interests.insert(comedy)
+participant9.interests.insert(acting)
 
-if numberOfParticipantsSelected % 2 != 0 {
-    numberOfParticipantsSelected += 1
-}
 
-print (numberOfParticipantsSelected)
+var participant10 = Participant(name: "Marshall", age: 27)
 
-for i in 1...numberOfParticipantsSelected {
+participant10.interests.insert(football)
+participant10.interests.insert(eatingPizza)
+participant10.interests.insert(dancing)
+participant10.interests.insert(playingGames)
+participant10.interests.insert(drinkingCoffee)
+
+
+var participant11 = Participant(name: "Lily", age: 26)
+
+participant11.interests.insert(shopping)
+participant11.interests.insert(acting)
+participant11.interests.insert(dancing)
+participant11.interests.insert(comedy)
+participant11.interests.insert(acting)
+
+
+var participant12 = Participant(name: "Celia", age: 27)
+
+participant12.interests.insert(acting)
+participant12.interests.insert(singing)
+participant12.interests.insert(dancing)
+participant12.interests.insert(shopping)
+participant12.interests.insert(acting)
+
+// Matching Algorithm xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+func matching(participants: [Participant]) -> [(Participant, Participant?)] {
+    var participants = participants
+    var matches: [(Participant, Participant?)] = []
     
-    participantsSelected.append(participantsAvailable[i])
-}
-
-print (participantsSelected.count)
-
-//Pairing
-
-for i in 0...participantsSelected.count {
-    if participantsSelected[i].interest.intersection(participantsSelected[i+1].interest) == [] {
-        participantsSelected.remove(at: i)
-        participantsSelected.remove(at: i+1)
-        print (participantsSelected.count)
+    while !participants.isEmpty {
+        let current = participants.popLast()!
+        guard !participants.isEmpty else {
+            matches.append((current, nil))
+            break
+        }
+        
+        let interests = current.interests
+        
+        var found: (index: Int, matchCount: Int) = (0, Int.max)
+        for current in participants.enumerated() {
+            let matchCount = current.element.interests.intersection(interests).count
+            guard matchCount <= found.matchCount else { continue }
+            found = (current.offset, matchCount)
+        }
+        
+        let match = participants.remove(at: found.index)
+        matches.append((current, match))
     }
+    
+    return matches
 }
 
+// Participants Algorithm and Print xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+var participants: [Participant] = [participant1, participant2, participant3, participant4, participant5, participant6, participant7, participant8, participant9, participant10, participant11, participant12]
+
+participants.shuffle()
+
+let maxParticipants = 12
+var random = Int.random(in: 2 ... 12)
+
+if random % 2 != 0 {
+    random += 1
+}
+
+let randomParticipants = (maxParticipants - random)
+
+for _ in 0..<randomParticipants {
+    participants.remove(at: 0)
+}
+
+print ("Hi! My name is Katie, and we're going to play a party game! Let's get everybody to introduce themselves, their age, and their interests, then I'll pair you guys up with another person with little to no common interests!\n\n")
+
+for member in 0..<participants.count {
+    print ("Hi, my name is \(participants[member].name), my age is \(participants[member].age)")
+    print ("These are my interests: \n")
+}
+
+print ("Terrific! Here are the pairings: ")
+
+let matches = matching(participants: participants)
+
+matches.forEach {
+    guard let match = $0.1 else {
+        print($0.0.name, "unmatched")
+        return
+    }
+    print($0.0.name, match.name, $0.0.interests.intersection(match.interests).count)
+}
